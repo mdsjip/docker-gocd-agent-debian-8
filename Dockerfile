@@ -18,11 +18,11 @@
 ###############################################################################################
 
 FROM debian:8
-MAINTAINER GoCD <go-cd-dev@googlegroups.com>
+MAINTAINER mdsjip <mds.jip@gmail.com>
 
 LABEL gocd.version="17.11.0" \
-  description="GoCD agent based on debian version 8" \
-  maintainer="GoCD <go-cd-dev@googlegroups.com>" \
+  description="GoCD agent based on debian version 8 with maven" \
+  maintainer="mdjsip <mds.jip@gmail.com>" \
   gocd.full.version="17.11.0-5520" \
   gocd.git.sha="9f6909e2f64b07d2dce5cecd4ea5b92b8e19d6b1"
 
@@ -56,7 +56,9 @@ RUN \
 # unzip the zip file into /go-agent, after stripping the first path prefix
   unzip /tmp/go-agent.zip -d / && \
   mv go-agent-17.11.0 /go-agent && \
-  rm /tmp/go-agent.zip
+  rm /tmp/go-agent.zip && \
+# download and install maven
+  curl -sSL "http://mirror.linux-ia64.org/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz" | tar -xzf - -C /opt/ && mv /opt/apache-maven* /opt/maven && ln -s /opt/maven/bin/mvn /usr/bin/mvn
 
 # ensure that logs are printed to console output
 COPY agent-bootstrapper-logback-include.xml /go-agent/config/agent-bootstrapper-logback-include.xml
