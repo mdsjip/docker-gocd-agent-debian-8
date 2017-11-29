@@ -48,7 +48,7 @@ RUN \
   useradd -u ${UID} -g go -d /home/go -m go && \
   echo 'deb http://deb.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list && \
   apt-get update && \
-  apt-get install -y openjdk-8-jre-headless ca-certificates-java="20161107~bpo8+1" git subversion mercurial openssh-client bash unzip curl && \
+  apt-get install -y openjdk-8-jdk-headless ca-certificates-java="20161107~bpo8+1" git subversion mercurial openssh-client bash unzip curl && \
   apt-get autoclean && \
   /var/lib/dpkg/info/ca-certificates-java.postinst configure && \
 # download the zip file
