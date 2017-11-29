@@ -44,11 +44,11 @@ RUN \
   chown root:root /usr/local/sbin/gosu && \
 # add our user and group first to make sure their IDs get assigned consistently,
 # regardless of whatever dependencies get added
-  groupadd -g ${GID} go && \ 
+  groupadd -g ${GID} go && \
   useradd -u ${UID} -g go -d /home/go -m go && \
   echo 'deb http://deb.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list && \
   apt-get update && \
-  apt-get install -y openjdk-8-jdk-headless ca-certificates-java="20161107~bpo8+1" git subversion mercurial openssh-client bash unzip curl && \
+  apt-get install -y openjdk-8-jre-headless openjdk-8-jdk-headless ca-certificates-java="20161107~bpo8+1" git subversion mercurial openssh-client bash unzip curl && \
   apt-get autoclean && \
   /var/lib/dpkg/info/ca-certificates-java.postinst configure && \
 # download the zip file
@@ -58,7 +58,9 @@ RUN \
   mv go-agent-17.11.0 /go-agent && \
   rm /tmp/go-agent.zip && \
 # download and install maven
-  curl -sSL "http://mirror.linux-ia64.org/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz" | tar -xzf - -C /opt/ && mv /opt/apache-maven* /opt/maven && ln -s /opt/maven/bin/mvn /usr/bin/mvn
+  curl -sSL "http://mirror.linux-ia64.org/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz" | tar -xzf - -C /opt/ && mv /opt/apache-maven* /opt/maven && ln -s /opt/maven/bin/mvn /usr/bin/mvn && \
+# kubectl
+  mkdir -p /opt/kubectl/ && curl -sSL4 https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o /opt/kubectl/kubectl && chmod +x /opt/kubectl/kubectl && ln -fs /opt/kubectl/kubectl /usr/bin/kubectl
 
 # ensure that logs are printed to console output
 COPY agent-bootstrapper-logback-include.xml /go-agent/config/agent-bootstrapper-logback-include.xml
